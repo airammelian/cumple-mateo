@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft Quest - Mateo</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(#3aa655,#0d3b0d);
+    color:white;
+    text-align:center;
+    min-height:100vh;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:rgba(0,0,0,.75);
+    border:4px solid #4ade80;
+    border-radius:25px;
+    padding:25px;
+    margin-top:20px;
+}
+
+input{
+    width:90%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    font-size:18px;
+}
+
+button{
+    margin-top:15px;
+    padding:12px 25px;
+    border:none;
+    border-radius:10px;
+    background:#22c55e;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#16a34a;
+}
+
+.progress{
+    background:#444;
+    height:20px;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.bar{
+    height:100%;
+    width:0%;
+    background:#38bdf8;
+    transition:.5s;
+}
+
+.diamonds{
+    font-size:32px;
+    margin-top:15px;
+}
+
+.hidden{
+    display:none;
+}
+
+.bounce{
+    animation:bounce 1s infinite;
+    font-size:70px;
+}
+
+@keyframes bounce{
+    50%{
+        transform:translateY(-10px);
+    }
+}
+
+.cofre{
+    font-size:90px;
+    animation:abrir 1.5s infinite;
+}
+
+@keyframes abrir{
+    50%{
+        transform:scale(1.1);
+    }
+}
+
+.whatsapp{
+    display:inline-block;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card" id="juego">
+
+<div class="bounce">⛏️</div>
+
+<h1>Minecraft Quest</h1>
+
+<h3>Ayuda a Steve a encontrar el tesoro de Mateo</h3>
+
+<p id="nivel">Nivel 1 de 5</p>
+
+<div class="progress">
+<div class="bar" id="barra"></div>
+</div>
+
+<h2 id="diamantesTxt">0 / 35 💎</h2>
+
+<div class="diamonds" id="diamantes"></div>
+
+<div id="pregunta" style="margin:25px;font-size:22px"></div>
+
+<input id="respuesta" placeholder="Escribe tu respuesta">
+
+<br>
+
+<button onclick="comprobar()">⛏️ Romper bloque</button>
+
+<p id="mensaje"></p>
+
+<p>
+Consigue los 35 diamantes para abrir el cofre final.
+</p>
+
+</div>
+
+<div class="card hidden" id="final">
+
+<div class="cofre">🎁</div>
+
+<h1>¡COFRE DESBLOQUEADO!</h1>
+
+<h2>🎂 Mateo cumple 7 años 🎂</h2>
+
+<h3>📅 2 de septiembre</h3>
+
+<h3>⏰ 11:00 horas</h3>
+
+<h3>📍 Don Pepe, Parque Holandés</h3>
+
+<p style="font-size:36px">
+💎💎💎💎💎💎💎💎💎💎
+💎💎💎💎💎💎💎💎💎💎
+💎💎💎💎💎💎💎💎💎💎
+💎💎💎💎💎
+</p>
+
+<h3>🎮 Juegos · 🎂 Tarta · 🍬 Chuches · 🎁 Sorpresas</h3>
+
+<p>
+Los diamantes son valiosos,<br>
+pero los amigos como tú lo son mucho más.
+</p>
+
+<p>
+📞 628 098 124<br>
+📞 663 398 843
+</p>
+
+<a class="whatsapp"
+href="https://wa.me/34628098124"
+target="_blank">
+
+<button>
+📱 Confirmar asistencia
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+const retos = [
+
+{
+p:"📅 Tiene el nombre de un mes. Después de agosto llega él. ¿Cuál es?",
+r:["septiembre"]
+},
+
+{
+p:"🔢 Soy el número que viene justo después del 1. ¿Qué número soy?",
+r:["2","dos"]
+},
+
+{
+p:"⏰ En mi reloj tengo dos unos juntos. ¿Qué hora marca?",
+r:["11","11:00","once"]
+},
+
+{
+p:"💎 Steve encontró 7 diamantes. Luego encontró 7 más. Después otros 7 y otros 7. ¿Cuántos diamantes tiene?",
+r:["28","veintiocho"]
+},
+
+{
+p:"🎂 Hoy es mi cumpleaños. Mi nombre empieza por M. ¿Quién soy?",
+r:["mateo"]
+}
+
+];
+
+let paso = 0;
+let diamantes = 0;
+
+function mostrarPregunta(){
+
+document.getElementById("pregunta").innerHTML =
+retos[paso].p;
+
+document.getElementById("nivel").innerHTML =
+"Nivel " + (paso + 1) + " de 5";
+
+}
+
+function comprobar(){
+
+const valor =
+document.getElementById("respuesta")
+.value
+.toLowerCase()
+.trim();
+
+if(retos[paso].r.includes(valor)){
+
+diamantes += 7;
+
+document.getElementById("mensaje").innerHTML =
+"✅ ¡Correcto! Has ganado 7 diamantes.";
+
+document.getElementById("diamantesTxt").innerHTML =
+diamantes + " / 35 💎";
+
+document.getElementById("diamantes").innerHTML =
+"💎".repeat(diamantes/7);
+
+document.getElementById("barra").style.width =
+(diamantes/35*100)+"%";
+
+paso++;
+
+document.getElementById("respuesta").value = "";
+
+if(paso >= retos.length){
+
+setTimeout(function(){
+
+document.getElementById("juego")
+.classList.add("hidden");
+
+document.getElementById("final")
+.classList.remove("hidden");
+
+},1000);
+
+return;
+
+}
+
+setTimeout(function(){
+
+document.getElementById("mensaje").innerHTML = "";
+
+mostrarPregunta();
+
+},1000);
+
+}else{
+
+alert("💥 ¡Creeper! Inténtalo otra vez.");
+
+}
+
+}
+
+document
+.getElementById("respuesta")
+.addEventListener("keypress", function(event){
+
+if(event.key === "Enter"){
+comprobar();
+}
+
+});
+
+mostrarPregunta();
+
+</script>
+
+</body>
+</html>
